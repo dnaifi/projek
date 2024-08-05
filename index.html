@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flappy bird</title>
+  </head>
+  <body>
+    <canvas
+      id="world"
+      width="500"
+      height="500"
+      style="border: 1px solid black"
+    ></canvas>
+
+    <script>
+      // Inisialisasi Canvas
+      let canvas = document.getElementById("world");
+      let context = canvas.getContext("2d");
+
+      //   import assets
+      let bird = new Image();
+      bird.src = "bird.jpg";
+
+      let  boing = new Audio();
+     boing.src = "boing.mp3";
+    boing.load();
+
+      //   state
+      let g = 0;
+      let jump = 15;
+      let xBird = 0;
+      let yBird = canvas.height / 2 - 100;
+      let wBird = 50;
+      let hBird = 50;
+      let kalah = false;
+
+      window.addEventListener("keydown", function () {
+        if (event.keyCode == 32) {
+          g -= jump;
+        boing.pause();
+        boing.currentTime = 0.0;
+        boing.play();
+        }
+      });
+
+      let lebarPipa = 50;
+      let batasAman = 150;
+      let tinggiPipaAtas = 100;
+      let tinggiPipaBawah = canvas.height - batasAman - tinggiPipaAtas;
+      let kecepatanPipa = 2;
+      let xPipa = canvas.width - lebarPipa;
+      let yPipaAtas = 0;
+      let yPipaBawah = tinggiPipaAtas + batasAman;
+
+      window.setInterval(function () {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        g = g + 1;
+
+        context.drawImage(bird, xBird, yBird, wBird, hBird);
+
+        yBird = yBird + g;
+
+        if (yBird >= canvas.height) {
+          console.log("Game Over");
+          g = 0;
+          xBird = 0;
+          yBird = canvas.height / 2 - 100;
+          wBird = 50;
+          hBird = 50;
+          xPipa = canvas.width + lebarPipa;
+        }
+        if (yBird < 0) {
+          yBird = 0;
+          g = 0;
+        }
+
+        xPipa = xPipa - kecepatanPipa;
+
+        context.fillStyle = "green";
+        context.fillRect(xPipa, 0, lebarPipa, 100);
+        context.fillStyle = "black";
+        context.strokeRect(xPipa, 0, lebarPipa, 100);
+
+        context.fillStyle = "green";
+        context.fillRect(xPipa, yPipaBawah, lebarPipa, tinggiPipaBawah);
+        context.fillStyle = "black";
+        context.strokeRect(xPipa, yPipaBawah, lebarPipa, tinggiPipaBawah);
+
+        if (xBird + lebarPipa >= xPipa && xBird <= xPipa + lebarPipa && yBird >= yPipaBawah) {
+          alert("game over");
+          g = 0;
+          xBird = 0;
+          yBird = canvas.height / 2 - 100;
+          wBird = 50;
+          hBird = 50;
+          xPipa = canvas.width + lebarPipa;
+        }
+        if (xBird + lebarPipa >= xPipa && xBird <= xPipa + lebarPipa && yBird <= tinggiPipaAtas) {
+          alert("game over");
+          g = 0;
+          xBird = 0;
+          yBird = canvas.height / 2 - 100;
+          wBird = 50;
+          hBird = 50;
+          xPipa = canvas.width + lebarPipa;
+        }
+      }, 1000 / 30);
+    </script>
+  </body>
+</html
